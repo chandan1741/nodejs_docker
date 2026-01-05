@@ -1,23 +1,30 @@
-version: '3.8'
-
 services:
   node-api:
     container_name: node_api_container
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
 
     ports:
       - "3002:5000"
+
     env_file:
       - .env
+
     volumes:
       - .:/app
       - /app/node_modules
-    restart : unless-stopped
+
+    restart: unless-stopped
+
     networks:
-      - node_network
-  
+      node_network:
+        ipv4_address: 172.30.0.10
+
 networks:
   node_network:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/16
+          gateway: 172.30.0.1
